@@ -1,0 +1,101 @@
+:root{
+   ---primaryColor: #fcf6f6;
+   ---secondaryColor: #62519c;
+   ---textColor: #d8d1d1;
+   ---headerText: #696667;
+   ---error: #942929;
+ }
+
+form {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   margin: auto;
+   width: 400px;  
+   position: relative;
+   bottom: 2rem;
+   border-radius: 5px;
+   border-top-left-radius: 50px;
+   border-bottom-right-radius: 50px;
+   border: 3px solid var(---secondaryColor);
+}
+
+form h1 {
+   color: var(---secondaryColor);
+   font-style: oblique;
+   border-bottom: 4px solid;
+}
+
+form .fields {
+   margin-top: -2rem;
+}
+
+form input {
+   height: 25px;
+   width: 20rem;
+   border: none;
+   background: transparent;
+   border-bottom: 3px solid var(---secondaryColor);
+   font-family: Verdana, Geneva, Tahoma, sans-serif;
+   font-size: 13px;
+   color: var(---headerText);
+   outline: none;
+   position: relative;
+}
+
+form span {
+   color: #beb5b5;
+   position: absolute;
+   margin-top: 7px;
+}
+
+form .error {
+   color: var(---error);
+   font-size: 13px;
+}
+
+form .eye{
+   margin-left: -20px;
+   color: var(---headerText);
+}
+
+::placeholder {
+   color: var(---headerText);
+}
+
+form input:hover {
+   background: var(---textColor);
+   border-radius: 6px;
+}
+
+form input:focus {
+   outline: none;
+   border-radius: 6px;
+}
+
+form .btn {
+   margin: 8px 0;
+   padding: 4px;
+   background-color: var(---secondaryColor);
+   border: none;
+   color: var(---primaryColor);
+   border-radius: 6px;
+   cursor: pointer;
+   margin-top: 10px;
+}
+
+form .btn:hover {
+   background-color: #332c2e;
+}
+
+@media screen and (max-width: 759px){
+   form {
+      width: auto;
+   }
+
+   form input {
+      width: 18rem;
+   }
+}
+

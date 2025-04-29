@@ -1,0 +1,277 @@
+:root{
+  ---primaryColor: #fcf6f6;
+  ---secondaryColor: #62519c;
+  ---textColor: #d8d1d1;
+  ---headerText: #696667;
+  ---error: #942929;
+}
+
+body {
+  color: var(---headerText);
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+#layout{
+  box-sizing: border-box;
+  background-color: var(---primaryColor);
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden; /* Prevent horizontal overflow */
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+  padding: 0 2rem;
+  color: var(---headerText);
+  font-style: italic;
+}
+
+header .div-1, .div-2 {
+  display: flex;
+  gap: 5px;
+}
+
+header nav .div-2 button {
+  border-radius: 4px;
+  border: none;
+  border: 2px solid var(---secondaryColor);
+  cursor: pointer;
+  background: transparent;
+  color: var(---secondaryColor);
+}
+
+
+header div img {
+  margin-top: 5px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+header .nav-btn {
+  padding: 5px;
+  cursor: pointer;
+  background: transparent;
+  color: var(---secondaryColor);
+  border: none;
+  outline: none;
+  visibility: hidden;
+  opacity: 0;
+  font-size: 1.3rem;
+}
+
+/* navbar styling */
+nav div a {
+  margin: 0 1rem;
+  text-decoration: none;
+  color: var(---headerText);
+}
+
+/* stying home */
+.account-details {
+  background-color: var(---secondaryColor);
+  display: flex;
+  justify-content: space-around;
+  border-radius: 20px;
+  color: var(---textColor);
+  padding: 20px;
+  box-shadow: 0 0 5px;
+}
+
+.account-details a {
+  text-decoration: none;
+  color: var(---textColor);
+}
+
+.transactions {
+  display: flex;
+  justify-content: space-around;
+}
+
+.transactions div {
+  background-color: var(---secondaryColor);
+  padding: 50px;
+  border-radius: 20px;
+}
+
+.transactions div a {
+  text-decoration: none;
+  color: var(---textColor);
+}
+
+.transactions div span {
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+.number {
+  background-color: var(---secondaryColor);
+  padding: 10px;
+  text-align: center;
+  border-radius: 20px;
+  color: var(---textColor);
+  margin-top: 50px;
+}
+
+
+/* main styling */
+main {
+  flex: 1;
+  margin-top: 50px;
+  padding: 20px;
+}
+
+main div {
+  margin-top: 30px;
+}
+
+/* footer styling */
+.footer {
+  background-color: var(---secondaryColor);
+  display: flex;
+  justify-content: space-between;
+  padding-left: 4px;
+  padding-right: 4px;
+  color: #a59999;
+}
+
+.notfound {
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+}
+
+.account_container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.drop_down label {
+  margin-right: 6px;
+}
+
+.drop_down select {
+  cursor: pointer;
+}
+
+.select_1 {
+  margin-bottom: 6px;
+}
+
+.create_btn {
+  margin-top: 2rem;
+  padding: 5px;
+  background-color: var(---secondaryColor);
+  color: var(---primaryColor);
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.create_btn:hover {
+  background-color: var(---headerText);
+}
+
+.account_container h1 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 25px;
+}
+
+.error{
+  color: var(---error);
+}
+
+/* smaller screen */
+@media screen and (max-width: 759px){
+  #layout{
+    flex-direction: column;
+  }
+
+  header .nav-btn {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  header nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: 1s;
+    transform: translateY(-100%);
+  }
+
+  header nav .div-2 {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  header .responsive_nav {
+    transform: translateY(0);
+  }
+
+  nav .nav-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 2rem;
+  }
+
+  .account-details, .transactions {
+    display: block;
+    margin: 20px auto;
+    width: 90%;
+    padding: 10px;
+  }
+
+  .transactions div {
+    padding: 20px;
+    margin-top: 10px;
+  }
+
+  .number {
+    width: 90%;
+    margin: 20px auto;
+    padding: 5px;
+  }
+
+  .number h1 {
+   font-size: 20px;
+  }
+
+  .footer {
+    margin-top: -30px;
+  }
+
+  .account-details a, .transactions div a {
+    font-size: 14px;
+  }
+}
+
+/* remove up and down default toggle from number type input */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* input[type="number"] {
+  -moz-appearance: textfield;
+} */
