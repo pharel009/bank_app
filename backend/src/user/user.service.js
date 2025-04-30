@@ -97,15 +97,15 @@ export class UserServices {
 };
 
 // add column to users table
-static query1 = `alter table users add column isverify boolean default false`;
-static query2 = `alter table users add column verificationToken text`;
-
 static altarTable = async () => {
     try {
+        const query1 = `alter table users add column isverify boolean default false`;
+        const query2 = `alter table users add column verificationToken text`;
         await executeQuery(query1);
         await executeQuery(query2);
-
+        console.log("Users table altered")
     } catch (error) {
+        console.log("Users table failed to alter", error.message)
         throw new Error(error);
     }
 }

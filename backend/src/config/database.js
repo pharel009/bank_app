@@ -4,25 +4,35 @@ import { config } from "./env.js";
 const { Pool } = pkg;
 
 const pool = new Pool({
-    max: 100,
-    host: config.db.host,
-    user: config.db.user,
-    database: config.db.name,
-    password: config.db.password,
-    port: config.db.port
+    connectionString: config.db.database_url, 
+    ssl: {
+        rejectUnauthorized: false  // Required for Supabase
+    }
 });
 
-//using async and await to connect to database and execute query
-export const executeQuery = async (query, values = []) => {   
+// Check DB connection at startup
+export const connectToDB = async () => {
     try {
-        const client = await pool.connect(); // obtain a connection from the pool 
+      const client = await pool.connect();
+      console.log("✅ Connected to supabase DB successfully");
+      client.release(); // Always release the client
+    } catch (err) {
+      console.error("❌ Database connection failed:", err.message);
+    }
+  };
 
+// Query the database
+export const executeQuery = async (query, values = []) => {
+    let client;
+    try {
+        client = await pool.connect(); // obtain a connection from the pool 
         const result = await client.query(query, values); // execute the query
-
         return result.rows; // return the rows from the result
     } catch (err) {
         console.error("Error executing query", err);
         throw err;
+    } finally {
+        client.release();
     }
 };
 

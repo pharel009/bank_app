@@ -1,10 +1,12 @@
 import express from "express";
 import { config } from "./config/env.js";
+import { connectToDB } from "./config/database.js";
 import { createUserTable } from "./user/user.model.js";
 import { accountTable } from "./account/account.model.js";
 import { createDepositTable } from "./transaction/deposit/deposit.model.js";
 import { transferTable } from "./transaction/transfer/transfer.model.js";
 import { withdrawalTable } from "./transaction/withdrawal/withdrawal.model.js";
+import { UserServices } from "./user/user.service.js";
 import { userRouter } from "./user/user.routes.js";
 import { AccountRouter } from "./account/account.routes.js";
 import { transferRouter } from "./transaction/transfer/transfer.routes.js";
@@ -47,18 +49,25 @@ class Server {
   useErrorHandler() {
     app.use(GlobalError.handleError);
   }
-  listenServer() {
-    app.listen(config.port, () => {
-      // createUserTable();
-      // accountTable();
-      // createDepositTable();
-      // transferTable();
-      // withdrawalTable();
-      // Services.altarTable()
-      // Services.addColumn()
-      console.log(`server running on http://localhost:${config.port}`);
-    });
+  async listenServer() {
+    try {
+      await connectToDB()
+      app.listen(config.port, () => {
+        // createUserTable();
+        // accountTable();
+        // createDepositTable();
+        // transferTable();
+        // withdrawalTable();
+        // UserServices.altarTable()
+        // Services.addColumn()
+        console.log(`server running on http://localhost:${config.port}`);
+      });
+    } catch (error) {
+      console.error("Server failed to start due to database connection error:", err.message);
+      process.exit(1); // Exit the process gracefully if the DB connection fails
+    }
+  
   }
-}
+};
 
 new Server();
