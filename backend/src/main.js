@@ -63,7 +63,7 @@ class Server {
         console.log(`server running on http://localhost:${config.port}`);
       });
     } catch (error) {
-      console.error("Server failed to start due to database connection error:", err.message);
+      console.error("Server failed to start due to database connection error:", error.message);
       process.exit(1); // Exit the process gracefully if the DB connection fails
     }
   
