@@ -1,7 +1,7 @@
 {
   "name": "backendclass",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "dev": "nodemon src/main.js"
   },
