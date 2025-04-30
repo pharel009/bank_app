@@ -10,7 +10,7 @@ import Layout from "./component/Layout/Layout";
 import { useAuthContext } from "./component/hooks/useAuthContext";
 import { NotFound } from "./component/pages/NotFound"
 import { useEffect } from "react";
-import { Loader } from "./component/common/Loader"
+// import { Loader } from "./component/common/Loader"
 
 function App() {
   const { user, checkUser, loadingUser } = useAuthContext();
@@ -20,7 +20,9 @@ function App() {
   }, []);
 
   if (loadingUser) {
-    return <Loader />
+    return (
+      <p>Loading....</p>
+    )
   }
 
   return (
