@@ -1,12 +1,12 @@
-import { UserServices } from "../user/user.service.js";
+import { userService } from "../user/user.service.js";
 import { uniqueAccountNumber } from "../utils/generateAccount.js";
-import { AccountServices } from "./account.service.js";
+import { accountService } from "./account.service.js";
 import { ErrorResponse } from "../middlewares/error.js";
 import { validateAccount } from "./account.validator.js";
 
-export class AccountController {
+class AccountController {
   //create account and get acct number controller
-  static async createAcount(req, res, next) {
+  async createAcount(req, res, next) {
     const userId = req.user.id; 
     const { currency, type } = req.body;
     try {
@@ -16,13 +16,13 @@ export class AccountController {
         return next(new ErrorResponse(validationError.message, validationError.status));    
       }
 
-      const user = await UserServices.getUserById(userId);
+      const user = await userService.getUserById(userId);
 
       if (!user) {
         return next(new ErrorResponse("User not found", 404));
       }
 
-      const userAccountExist = await AccountServices.getAccountByUserId(userId);
+      const userAccountExist = await accountService.getAccountByUserId(userId);
   
       if (userAccountExist.length > 0) {
         return next(new ErrorResponse('You already have an account with us', 409));
@@ -31,7 +31,7 @@ export class AccountController {
       const accountNumber = await uniqueAccountNumber();      
 
       //save acccount to database
-      const newAccountNumber = await AccountServices.createAcoount(userId, accountNumber, currency, type);
+      const newAccountNumber = await accountService.createAcoount(userId, accountNumber, currency, type);
 
       return res.status(201).json({
         message: "Account created successfully",
@@ -41,5 +41,7 @@ export class AccountController {
       return next(error);
     }
   }
-
 };
+
+
+export const accountController = new AccountController();

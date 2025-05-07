@@ -1,12 +1,12 @@
 import { config } from "../config/env.js";
 import jwt from "jsonwebtoken";
 import { ErrorResponse } from "./error.js";
-import { UserServices } from "../user/user.service.js";
+import { userService } from "../user/user.service.js";
 import { sanitize } from "../utils/sanitizeUser.js";
 
 
 //verify token token from the cookies
-export const verifyUser = async(req, res, next) => {
+export const verifyUser = async (req, res, next) => {
     const token = req.cookies.token;
 
     if (!token) {
@@ -19,7 +19,7 @@ export const verifyUser = async(req, res, next) => {
             return next(new ErrorResponse('Invalid user', 401))
         }
 
-        const decodedUser = await UserServices.getUserById(decoded.userId);
+        const decodedUser = await userService.getUserById(decoded.userId);
 
         if (!decodedUser) {
             return next(new ErrorResponse('User not found', 404));

@@ -1,9 +1,9 @@
 import { executeQuery } from "../../config/database.js";
 
 
-export class TransferServices {
+class TransferServices {
 //function to make transfer
-static async makeTransfer(senderAccountNum,  receiverAccountNum, senderAmount, recieverAmount) {
+async makeTransfer(senderAccountNum,  receiverAccountNum, senderAmount, recieverAmount) {
     try {        
         await executeQuery('BEGIN')
 
@@ -24,7 +24,7 @@ static async makeTransfer(senderAccountNum,  receiverAccountNum, senderAmount, r
 };
 
 //function to post to transfers table
-static async postTransfer(senderAccountNum, receiverAccountNum, amount) {
+async postTransfer(senderAccountNum, receiverAccountNum, amount) {
     try {        
         const query = `INSERT INTO transfers (fromAccountNumber, toAccountNumber, amount) VALUES ($1, $2, $3) RETURNING *`;
         const result = await executeQuery(query, [senderAccountNum, receiverAccountNum, amount])
@@ -35,3 +35,5 @@ static async postTransfer(senderAccountNum, receiverAccountNum, amount) {
 };
 
 };
+
+export const transferService = new TransferServices();

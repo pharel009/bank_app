@@ -1,4 +1,4 @@
-import { AccountServices } from "../account/account.service.js";
+import { accountService } from "../account/account.service.js";
 
 //function to create 10 digit account number
 const generateAccountNumber = () => {
@@ -10,11 +10,11 @@ const generateAccountNumber = () => {
 
 export const uniqueAccountNumber = async () => {
   let accountNumber = generateAccountNumber();
-  let existingAccounts = await AccountServices.getAccountNumber(accountNumber);
+  let existingAccounts = await accountService.getAccountNumber(accountNumber);
 
   if (existingAccounts.length > 0) {
     accountNumber = generateAccountNumber();
-    existingAccounts = await AccountServices.getAccountNumber(accountNumber);
+    existingAccounts = await accountService.getAccountNumber(accountNumber);
   }
 
   return accountNumber;

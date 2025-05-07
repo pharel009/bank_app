@@ -1,6 +1,6 @@
 import { executeQuery } from "../../config/database.js";
 
-export class WithdrawalServices {
+class WithdrawalServices {
 //query to make withdrawal
 static async makeWithdrawal(accountNumber, amount) {
     try {        
@@ -29,3 +29,5 @@ static async postWithdrawal(accountNumber, amount) {
     }
 };
 };
+
+export const withdrawalService = new WithdrawalServices();

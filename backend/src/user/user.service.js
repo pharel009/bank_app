@@ -2,9 +2,9 @@ import { executeQuery } from "../config/database.js";
 import { v4 as uuidv4 } from "uuid";
 import { generateVerificationToken } from "../utils/jwt.js";
 
-export class UserServices {
+class UserServices {
     //create user query
-  static async createUser(firstName, lastName, email,phoneNumber, password) {
+  async createUser(firstName, lastName, email,phoneNumber, password) {
     try {
         const userId = uuidv4();
         const verificationToken = generateVerificationToken();
@@ -20,18 +20,18 @@ export class UserServices {
 };
 
 //get users by email query
- static async getUserByEmail(email) {
-    try {
-        const query = `SELECT * FROM users WHERE email = $1`
-        const result = await executeQuery(query, [email]);
-        return result[0];
-    } catch (error) {
-        throw new Error(error);
-    }
+    async getUserByEmail(email) {
+        try {
+            const query = `SELECT * FROM users WHERE email = $1`
+            const result = await executeQuery(query, [email]);
+            return result[0];
+        } catch (error) {
+            throw new Error(error);
+        }
   };
 
   //get users by phone number
- static async getUserByPhoneNumber(phonenumber) {
+ async getUserByPhoneNumber(phonenumber) {
     try {
         const query = `SELECT * FROM users WHERE phoneNumber =$1`
         const result = await executeQuery(query, [phonenumber]);
@@ -42,7 +42,7 @@ export class UserServices {
 };
 
 //get all users query
- static async getUsers() {
+ async getUsers() {
     try {
         const query = `SELECT * FROM users ORDER BY id ASC`
         const result = await executeQuery(query);
@@ -53,7 +53,7 @@ export class UserServices {
 };
 
 //get single user by id query
- static async getUserById(userId) {
+ async getUserById(userId) {
     try{
         const query = `SELECT * FROM users WHERE Id = $1`;
         const result = await executeQuery(query, [userId]);
@@ -64,7 +64,7 @@ export class UserServices {
 };
 
 //delete user by id query
- static async removeUserById(userId) {
+ async removeUserById(userId) {
     try {
         const query = `DELETE FROM users WHERE id = $1 RETURNING *`
         const result = await executeQuery(query, [userId]);
@@ -75,7 +75,7 @@ export class UserServices {
 };
 
 // get usertoken
- static async getUserByToken(token) {
+ async getUserByToken(token) {
     try {
         const query = `SELECT * FROM users WHERE verificationtoken = $1`;
         const [result] = await executeQuery(query, [token])
@@ -86,7 +86,7 @@ export class UserServices {
 };
 
 // set verified to true 
- static async verifyuser(userId) {
+ async verifyuser(userId) {
     try {
         const query = `UPDATE users SET isverified = true WHERE id = $1 RETURNING *`;
         const result = await executeQuery(query, [userId]);
@@ -97,7 +97,7 @@ export class UserServices {
 };
 
 // add column to users table
-static altarTable = async () => {
+ async altarTable () {
     try {
         const query1 = `alter table users add column isverify boolean default false`;
         const query2 = `alter table users add column verificationToken text`;
@@ -110,10 +110,9 @@ static altarTable = async () => {
     }
 }
 
-static resetPassword = `alter table users add column reset_password varchar(225)`;
-static resetTokenExpiresAt = `alter table users add column reset_token_expires timestamp`;
-
-static addColumn = async () => {
+ async addColumn () {
+    const resetPassword = `alter table users add column reset_password varchar(225)`;
+    const resetTokenExpiresAt = `alter table users add column reset_token_expires timestamp`;
     try {
         await executeQuery(resetPassword);
         await executeQuery(resetTokenExpiresAt);
@@ -125,7 +124,7 @@ static addColumn = async () => {
 
 };
 
-
+export const userService = new UserServices();
 
 // export const veriftyPasswordToken = async (token) => {
 //     try{

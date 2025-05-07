@@ -1,4 +1,4 @@
-import { UserServices } from "./user.service.js";
+import { userService } from "./user.service.js";
 import { hashpassword, comparePassword } from "../utils/bcrypt.js";
 import { generateToken } from "../utils/jwt.js";
 import { sanitize, sanitizeUserArray } from "../utils/sanitizeUser.js";
@@ -6,13 +6,13 @@ import { sendMail } from "../utils/sendmail.js";
 import { sendForgotPasswordMail } from "../utils/resetpassword.js";
 import { validateLogin, validateSignup } from "./validator.js";
 import { ErrorResponse } from "../middlewares/error.js";
-import { AccountServices } from "../account/account.service.js";
+import { accountService } from "../account/account.service.js";
 
 
-export class userController {
+class UserController {
   //post controller to sign up
-   static async sign_up(req, res, next) {
-    const { firstName, lastName, email, phoneNumber, password } = req.body;
+  async sign_up(req, res, next) {
+      const { firstName, lastName, email, phoneNumber, password } = req.body;
     try {
       const validationError = validateSignup({ firstName, lastName, email, phoneNumber, password })
 
@@ -20,8 +20,8 @@ export class userController {
         return next(new ErrorResponse(validationError.message, validationError.status));
       }
 
-      const userEmailExists = await UserServices.getUserByEmail(email);
-      const userNumExists = await UserServices.getUserByPhoneNumber(phoneNumber);
+      const userEmailExists = await userService.getUserByEmail(email);
+      const userNumExists = await userService.getUserByPhoneNumber(phoneNumber);
   
       if (userEmailExists || userNumExists) {
         return next(new ErrorResponse('User with email or phone number already exist', 409));
@@ -31,7 +31,7 @@ export class userController {
       const hashedpassword = await hashpassword(password);
       
       // create the new user in the database
-      const newUser = await UserServices.createUser(firstName,lastName,email,phoneNumber,hashedpassword);
+      const newUser = await userService.createUser(firstName,lastName,email,phoneNumber,hashedpassword);
         
       // await sendMail(newUser);
   
@@ -55,7 +55,7 @@ export class userController {
 
 
   // post controller to login
- static async login(req, res, next) {
+ async login(req, res, next) {
   const { email, password } = req.body;
   try {
     const validationError = validateLogin({ email, password });
@@ -65,7 +65,7 @@ export class userController {
     }
 
     //checking for email
-    const user = await UserServices.getUserByEmail(email);
+    const user = await userService.getUserByEmail(email);
     
     if (!user) {      
       return next(new ErrorResponse('Invalid credentials', 404));
@@ -97,7 +97,7 @@ export class userController {
 };
 
 //logout controller
-static logout = (req, res, next) => {
+ async logout (req, res, next) {
   try {
     res.clearCookie('token', {
       httpOnly: true,
@@ -111,9 +111,9 @@ static logout = (req, res, next) => {
 };
 
 //get all users controller
- static async getAllUsers(req, res, next) {
+ async getAllUsers(req, res, next) {
   try {
-    const users = await UserServices.getUsers();
+    const users = await userService.getUsers();
 
     if (users.length <= 0) {
       return next(new ErrorResponse('No user found',404))
@@ -129,10 +129,10 @@ static logout = (req, res, next) => {
 };
 
 //get user by id controller
-static async userById(req, res, next) {
+async userById(req, res, next) {
   try {
     const { id } = req.params;
-    const [user] = await UserServices.getUserById(id);
+    const [user] = await userService.getUserById(id);
 
     if (!user) return next(new ErrorResponse('No user found', 404));
 
@@ -145,10 +145,10 @@ static async userById(req, res, next) {
 };
 
 //delete user by id controller
-static async deleteUserById(req, res, next) {
+async deleteUserById(req, res, next) {
   try {
     const { id } = req.params;
-    const [user] = await UserServices.removeUserById(id);
+    const [user] = await userService.removeUserById(id);
     if (!user) {
       return next(new ErrorResponse('Invalid user'))
     }
@@ -184,14 +184,14 @@ static async deleteUserById(req, res, next) {
 // };
 
 //email verification
-static async userVerify(req, res, next) {
+async userVerify(req, res, next) {
   const token = req.query.token;
 
   if (!token) {
     return next(new ErrorResponse('You are not authorized', 401))
   }
 
-  const user = await UserServices.getUserByToken(token);
+  const user = await userService.getUserByToken(token);
 
   if (!user) {
    return next(new ErrorResponse('Invalid token', 401))
@@ -199,7 +199,7 @@ static async userVerify(req, res, next) {
 
   if (user.isVerified) return next(new ErrorResponse('User already verified', 400))
 
-  await Services.verifyuser(user.id);
+  // await Services.verifyuser(user.id);
 
   console.log("user account verified");
 
@@ -209,14 +209,14 @@ static async userVerify(req, res, next) {
 };
 
 // Check for authenticated users
-static async checkAuth(req, res, next) {
+async checkAuth(req, res, next) {
   const user = req.user;
   try {
     if (!user) {
       return next(new ErrorResponse('User not authenticated', 401));
     };
 
-    const [accountDetails] = await AccountServices.getAccountByUserId(user.id);
+    const [accountDetails] = await accountService.getAccountByUserId(user.id);
     
     if (!accountDetails) {
       return next(new ErrorResponse('This user do not have an account', 400));
@@ -242,7 +242,7 @@ static async checkAuth(req, res, next) {
 };
 };
 
-
+export const userController = new UserController();
 // //forgot password
 // export const forgotPassword = async (req, res) => {
 

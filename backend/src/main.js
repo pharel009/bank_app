@@ -6,9 +6,9 @@ import { accountTable } from "./account/account.model.js";
 import { createDepositTable } from "./transaction/deposit/deposit.model.js";
 import { transferTable } from "./transaction/transfer/transfer.model.js";
 import { withdrawalTable } from "./transaction/withdrawal/withdrawal.model.js";
-import { UserServices } from "./user/user.service.js";
+import { userService } from "./user/user.service.js";
 import { userRouter } from "./user/user.routes.js";
-import { AccountRouter } from "./account/account.routes.js";
+import { accountRouter } from "./account/account.routes.js";
 import { transferRouter } from "./transaction/transfer/transfer.routes.js";
 import { depositRouter } from "./transaction/deposit/deposit.routes.js";
 import { withdrawalRouter } from "./transaction/withdrawal/withdrawal.routes.js";
@@ -41,7 +41,7 @@ class Server {
   }
   addRoutes() {
     app.use("/users", userRouter);
-    app.use("/accounts", AccountRouter);
+    app.use("/accounts", accountRouter);
     app.use("/transfer", transferRouter);
     app.use("/deposit", depositRouter);
     app.use("/withdrawal", withdrawalRouter);
@@ -58,8 +58,8 @@ class Server {
         // createDepositTable();
         // transferTable();
         // withdrawalTable();
-        // UserServices.altarTable()
-        // Services.addColumn()
+        // userService.altarTable()
+        // userService.addColumn()
         console.log(`server running on http://localhost:${config.port}`);
       });
     } catch (error) {

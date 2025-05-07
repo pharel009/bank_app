@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { AccountController } from "./account.controller.js";
+import { accountController } from "./account.controller.js";
 import { verifyUser } from "../middlewares/verifyUser.js";
 
-export const AccountRouter = Router();
+export const accountRouter = Router();
 
-AccountRouter.use(verifyUser)
-AccountRouter.post('/create', AccountController.createAcount);
+accountRouter.use(verifyUser);
+accountRouter.post('/create', accountController.createAcount);

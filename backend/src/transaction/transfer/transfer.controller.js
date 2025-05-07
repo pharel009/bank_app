@@ -1,12 +1,12 @@
-import { TransferServices } from "./transfer.service.js";
+import { transferService } from "./transfer.service.js";
 import { validateTransfer } from "./transfer.validator.js";
 import { converter } from "../../utils/converter.js";
-import { AccountServices } from "../../account/account.service.js";
+import { accountService } from "../../account/account.service.js";
 import { ErrorResponse } from "../../middlewares/error.js";
 
 
-export class TransferController {
-    static async  transfer(req, res, next) {
+class TransferController {
+    async  transfer(req, res, next) {
         const user = req.user;
         const { receiverAccountNum, amount } = req.body;
         try {        
@@ -15,7 +15,7 @@ export class TransferController {
                 return next(new ErrorResponse(validateError.message, validateError.status))
             };
     
-            const [senderAcct] = await AccountServices.getAccountByUserId(user.id);
+            const [senderAcct] = await accountService.getAccountByUserId(user.id);
           
             if (!senderAcct){
                 return next(new ErrorResponse('Sender not found', 404))
@@ -32,7 +32,7 @@ export class TransferController {
                 return next(new ErrorResponse('Unauthorized user', 401))
             }
 
-            const [recieverAcct] = await AccountServices.getAccountNumber(receiverAccountNum)
+            const [recieverAcct] = await accountService.getAccountNumber(receiverAccountNum);
                     
             if (!recieverAcct){
                 return next(new ErrorResponse('Receiver not found', 404))
@@ -49,9 +49,9 @@ export class TransferController {
                 transferAmount = await converter(senderAcct.currency, recieverAcct.currency, amount);
             }
             
-            await TransferServices.makeTransfer(senderAccountNum, receiverAccountNum, amount, transferAmount);
+            await transferService.makeTransfer(senderAccountNum, receiverAccountNum, amount, transferAmount);
     
-            const trans = await TransferServices.postTransfer(senderAccountNum, receiverAccountNum, amount);
+            const trans = await transferService.postTransfer(senderAccountNum, receiverAccountNum, amount);
             
             return res.status(200).json({
                 message: "Transfer successful!!!",
@@ -64,3 +64,5 @@ export class TransferController {
         }
     }
 };
+
+export const transferController = new TransferController();

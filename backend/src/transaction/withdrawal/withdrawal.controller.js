@@ -1,11 +1,11 @@
-import { WithdrawalServices } from "./withdrawal.service.js";
+import { withdrawalService } from "./withdrawal.service.js";
 import { validateWithdrawal } from "./withdrawal.validator.js";
-import { AccountServices } from "../../account/account.service.js";
+import { accountService } from "../../account/account.service.js";
 import { ErrorResponse } from "../../middlewares/error.js";
 
 
-export class WithdrawalController {
-    static async withdrawal(req, res, next) {
+class WithdrawalController {
+    async withdrawal(req, res, next) {
         const user = req.user;
         const { accountNumber, amount } = req.body;
         try {
@@ -14,7 +14,7 @@ export class WithdrawalController {
                 return next(new ErrorResponse(validateError.message, validateError.status))
             }
    
-            const [withdrawAccount] = await AccountServices.getAccountNumber(accountNumber);
+            const [withdrawAccount] = await accountService.getAccountNumber(accountNumber);
 
             const account = withdrawAccount;
   
@@ -29,9 +29,9 @@ export class WithdrawalController {
                 return next(new ErrorResponse('Unauthorized ueser', 401))
             }
 
-            await WithdrawalServices.makeWithdrawal(accountNumber, amount)
+            await withdrawalService.makeWithdrawal(accountNumber, amount)
     
-            const withdrawal = await WithdrawalServices.postWithdrawal(accountNumber, amount);
+            const withdrawal = await withdrawalService.postWithdrawal(accountNumber, amount);
     
             return res.status(200).json({
                 message: 'Withdrawal successful!!!',
@@ -42,3 +42,5 @@ export class WithdrawalController {
         }
     };
 };
+
+export const withdrawalController = new WithdrawalController();

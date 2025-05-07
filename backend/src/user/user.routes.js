@@ -10,7 +10,6 @@ userRouter.get('/logout', userController.logout);
 userRouter.get('/get-users', userController.getAllUsers);
 userRouter.get('/get-users/:id', userController.userById);
 userRouter.delete('/delete-user/:id', userController.deleteUserById);
-// userRouter.get('/accounts',  verifyUser, userController.getUserAccounts);
 userRouter.get('/verify', userController.userVerify);
 userRouter.get('/check', verifyUser, userController.checkAuth);
 // userRouter.post('/forgot-password', forgotPassword);
